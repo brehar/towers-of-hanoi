@@ -2,12 +2,15 @@
 
 var originalTower;
 var pieceSelected = false;
-var moves = 20;
+var numDisks = 4;
+var allowedExtraMoves = 5;
+var moves = Math.pow(2, numDisks) - 1 + allowedExtraMoves;
 
 $(document).ready(init);
 
 function init() {
 	$('.tower').on('click', movePiece);
+	$('#submit').on('click', changeDisks);
 }
 
 function movePiece() {
@@ -41,8 +44,28 @@ function movePiece() {
 	checkWin();
 }
 
+function changeDisks(event) {
+	event.preventDefault();
+	
+	numDisks = $('#number').val();
+	
+	var htmlStr = '';
+
+	for (var x = 1; x <= numDisks; x++) {
+		htmlStr += '<div class="piece" id="piece' + x + '"></div>';
+	}
+
+	$('#tower1').html(htmlStr);
+
+	moves = Math.pow(2, numDisks) - 1 + allowedExtraMoves;
+
+	$('#moves').text(moves);
+
+	adjustSizes();
+}
+
 function adjustSizes() {
-	for (var x = 0; x < 4; x++) {
+	for (var x = 1; x < 4; x++) {
 		$('#tower' + x).children().css('top', 300 - 15 * $('#tower' + x).children().length);
 	}
 }
